@@ -1,9 +1,9 @@
 #include <stdio.h>
-float  arr[20][20]={0};//存储行列式
+float  arr[20][20]={0};
 int n=0;//记录矩阵阶数
 int z=0;
-float a[19]={0};//未知数计算结果
-float b[19]={0};//用于回代计算
+float a[19]={0};
+float b[19]={0};
 void setmatrix()//输入矩阵
 {
     for (int i = 0; i < n; ++i){
@@ -42,6 +42,7 @@ void simple(int k)//将矩阵列主元素单位化
     for (int i =0; i <n-1 ; i++) {
         sort(k);
     }
+
 getmatrix();
     for (int j = k; j <n ; ++j) {
         float  temp=arr[j][k];
@@ -56,15 +57,15 @@ getmatrix();
 
 void change (int k)       //初等行变换
 {
-    for (int i = k; i < n; ++i){
+    for (int i = k; i < n-1; ++i){
+    if(arr[i+1][k]==0) continue;
         for (int i1 = k; i1 < z; ++i1){
-            if (arr[i+1][k]==0)  break;
             arr[i+1][i1]=arr[i+1][i1]-arr[k][i1];
         }
     }
 
 }
-float gauss() 
+void gauss()
 {
     for (int k= 0; k< n; ++k)  {
            simple(k);       //对每行数据进行处理
@@ -73,7 +74,12 @@ float gauss()
     for (int i = 0; i < n; ++i){
         b[i]=arr[i][n];
     }
-    a[n-1]=b[n-1]/arr[n-1][n-1];
+    if(arr[n-1][n-1]==0){
+      a[n-1]=0;
+    }else{
+     a[n-1]=b[n-1]/arr[n-1][n-1];
+    }
+
     float S=0;
     for (int i =n-2; i >=0; i--) {
         S=b[i];
@@ -122,6 +128,7 @@ int main(){
     gauss();
     int k=1;
     for (int i = 0; i < n; ++i,k++){
+
         printf("x[%d]= %f \n",k,a[i]);
     }
 }
