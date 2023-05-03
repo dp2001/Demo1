@@ -65,7 +65,7 @@ void change (int k)       //初等行变换
     }
 
 }
-void gauss()
+void gauss() 
 {
     for (int k= 0; k< n; ++k)  {
            simple(k);       //对每行数据进行处理
@@ -79,7 +79,7 @@ void gauss()
     }else{
      a[n-1]=b[n-1]/arr[n-1][n-1];
     }
-
+   
     float S=0;
     for (int i =n-2; i >=0; i--) {
         S=b[i];
