@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.curriculumdesign.mapper.PersonalScoreMapper">
+
+<select id="getscorefrom" resultType="java.util.Map">
+    select
+        count(sc.grade) as value2,
+        count((case when grade>=60 then 1 end) ) AS value1   ,
+        sum(c.score) as credit
+    from sc,c
+    where sno=#{sno} and c.cno=sc.cno and grade is not null
+    </select>
+
+<select id="list" resultType="java.util.Map">
+      select sc.cno,c.cname, c.tname, sc.grade,c.score
+      from sc,c
+      where  sc.cno=c.cno and sc.sno=#{sno} and sc.grade is not null
+      ORDER BY c.score asc
+      limit #{beginsize},#{endsize}
+    </select>
+</mapper>

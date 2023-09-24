@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.curriculumdesign.mapper.ResearchMapper">
+
+<select id="AvgScore" resultType="java.util.Map">
+    select c.cname, ROUND(AVG( sc.grade),2) AS 分数
+    from c inner join sc on c.cno=sc.cno
+    <where>
+        <if test="Begin !=null and End !=null ">
+          sc.sno between #{Begin} and #{End} </if>
+        and sc.grade is not null
+    </where>
+    group by c.cname
+    </select>
+
+
+<select id="count" resultType="java.util.Map">
+    select
+        sum(case when grade between 0 and 59 then 1 else 0 end) as '0-59',
+        sum(case when grade between 60 and 69 then 1 else 0 end) as '60-69',
+        sum(case when grade between 70 and 79 then 1 else 0 end) as '70-79',
+        sum(case when grade between 80 and 89 then 1 else 0 end) as '80-89',
+        sum(case when grade between 90 and 100 then 1 else 0 end) as '90-100'
+    from sc, c
+        <where>
+             sc.cno=c.cno and  cname=#{cname}
+            <if test="Begin !=null and End !=null">
+                and  sno between #{Begin} and #{End}
+            </if>
+        </where>
+    </select>
+</mapper>

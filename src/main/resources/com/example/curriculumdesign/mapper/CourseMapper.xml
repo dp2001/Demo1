@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.curriculumdesign.mapper.CourseMapper">
+
+<select id="list" resultType="com.example.curriculumdesign.pojo.c">
+    SELECT * FROM c
+    <where>
+        <if test="cno !=null">
+            cno =#{cno}
+        </if>
+        <if test="cname !=null">
+            and    cname like CONCAT('%',#{cname},'%')
+        </if>
+        <if test="tname!=null" >
+            and    tname like CONCAT('%',#{tname},'%')
+        </if>
+    </where>
+    limit #{beginsize},#{endsize}
+
+    </select>
+
+<insert id="insert">
+    INSERT INTO c(cno, cname,tname,score,updatatime)
+    values(#{cno},#{cname},#{tname},#{score},now())
+
+    </insert>
+    <insert id="insert1">
+            INSERT INTO sc(sno, cno,grade,updatatime)
+            values
+        <foreach collection="list"  separator="," item="item">
+            (#{item},#{cno},null,null)
+        </foreach>
+    </insert>
+
+
+    <update id="update">
+    update c
+    set
+    <if test="cname !=null and cname !='' ">
+        cname=#{cname},
+    </if>
+    <if test="tname !=null and tname !='' ">
+        tname=#{tname},
+    </if>
+    <if test="score !=null and score !='' ">
+        score=#{score},
+    </if>
+    updatatime=now()
+    Where cno=#{cno}
+</update>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.curriculumdesign.mapper.StudyMapper">
+
+<select id="list" resultType="com.example.curriculumdesign.pojo.sc">
+    SELECT * FROM sc
+    <where>
+        <if test="sno !=null and sno!=''">
+           sno=#{sno}
+        </if>
+        <if test="cno !=null and cno!=''">
+            and cno= #{cno}
+        </if>
+        <if test="min !=null and max !=null and min!='' and max!=''" >
+            and  grade BETWEEN #{min} AND #{max}
+        </if>
+    </where>
+    ORDER BY sno asc
+    limit #{beginsize},#{endsize}
+    </select>
+
+<update id="update">
+     update sc
+     set  grade=#{grade},updatatime=now()
+     where sno=#{sno} and cno=#{cno}
+    </update>
+
+<select id="test" resultType="map" >
+    SELECT sc.grade,c.cno FROM sc,c
+    where  sc.cno=c.cno and sc.grade is not null
+    </select>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.curriculumdesign.mapper.PersonalCourseMapper">
+    <update id="update">
+
+       update sc
+            set updatatime=now()
+
+            where sno=#{sno} and cno in
+        <foreach collection="clist" open="(" close=")" separator="," item="list">
+              #{list}
+        </foreach>
+    </update>
+
+    <select id="list" resultType="java.util.Map">
+        select sc.cno,cname, tname, score, ISNULL(sc.updatatime) as status,total
+        from
+            (select c.cno,c.cname,score,tname,count(sc.cno) as total
+             from sc ,c
+             where sc.cno=c.cno and  sc.updatatime is not null
+             GROUP BY cno) as c2
+                inner join sc
+        where sc.cno = c2.cno
+          and sno = #{sno}
+        GROUP BY Cno
+    </select>
+</mapper>
